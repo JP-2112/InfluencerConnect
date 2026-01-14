@@ -5,39 +5,114 @@
     <h1 class="mb-4">Editar Perfil</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="mb-3">
-            <label for="username" class="form-label">Nombre de usuario</label>
-            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+        
+        <!-- Campos del usuario -->
+        <div class="form-group">
+            <label for="username">Nombre de usuario:</label>
+            <input type="text" id="username" name="username" class="form-control" value="{{ user.username }}" required>
         </div>
-        <div class="mb-3">
-            <label for="first_name" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+        
+        <div class="form-group">
+            <label for="first_name">Nombre:</label>
+            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ user.first_name }}">
         </div>
-        <div class="mb-3">
-            <label for="last_name" class="form-label">Apellido</label>
-            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+        
+        <div class="form-group">
+            <label for="last_name">Apellido:</label>
+            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ user.last_name }}">
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+        
+        <div class="form-group">
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" readonly>
         </div>
-        <div class="mb-3">
-            <label for="bio" class="form-label">Bio</label>
-            <textarea class="form-control" id="bio" name="bio" rows="3">{{ user.profile.bio }}</textarea>
+        
+        <!-- Campos del perfil base -->
+        <div class="form-group">
+            <label for="bio">Biografía:</label>
+            <textarea id="bio" name="bio" class="form-control">{{ profile.bio }}</textarea>
         </div>
-        <div class="mb-3">
-            <label for="location" class="form-label">Ubicación</label>
-            <input type="text" class="form-control" id="location" name="location" value="{{ user.profile.location }}">
+        
+        <div class="form-group">
+            <label for="location">Ubicación:</label>
+            <input type="text" id="location" name="location" class="form-control" value="{{ profile.location }}">
         </div>
-        <div class="mb-3">
-            <label for="website" class="form-label">Sitio web</label>
-            <input type="url" class="form-control" id="website" name="website" value="{{ user.profile.website }}">
+        
+        <div class="form-group">
+            <label for="website">Sitio web:</label>
+            <input type="url" id="website" name="website" class="form-control" value="{{ profile.website }}">
         </div>
-        <div class="mb-3">
-            <label for="profile_picture" class="form-label">Foto de perfil</label>
-            <input type="file" class="form-control" id="profile_picture" name="profile_picture">
-        </div>
-        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        
+        
+        
+        <!-- Campos específicos según el tipo de perfil -->
+        {% if company_profile %}
+            <div class="form-group">
+                <label for="categories">Categorías:</label>
+                {{ company_form.categories }}
+            </div>
+            
+            <div class="form-group">
+                <label for="company_size">Tamaño de la empresa:</label>
+                {{ company_form.company_size }}
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Descripción:</label>
+                {{ company_form.description }}
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="instagram_url">Instagram:</label>
+                {{ company_form.instagram_url }}
+            </div>
+            <div class="form-group">
+                <label for="youtube_url">YouTube:</label>
+                {{ company_form.youtube_url }}
+            </div>
+            <div class="form-group">
+                <label for="facebook_url">Facebook:</label>
+                {{ company_form.facebook_url }}
+            </div>
+            <div class="form-group">
+                <label for="x_url">X (Twitter):</label>
+                {{ company_form.x_url }}
+            </div>
+        {% endif %}
+        
+        {% if influencer_profile %}
+            <div class="form-group">
+                <label for="categories">Categorías:</label>
+                {{ influencer_form.categories }}
+            </div>
+
+
+            <div class="form-group">
+                <label for="audience_size">Tamaño de la audiencia:</label>
+                {{ influencer_form.audience_size }}
+            </div>
+
+            
+            <div class="form-group">
+                <label for="instagram_url">Instagram:</label>
+                {{ influencer_form.instagram_url }}
+            </div>
+            <div class="form-group">
+                <label for="youtube_url">YouTube:</label>
+                {{ influencer_form.youtube_url }}
+            </div>
+            <div class="form-group">
+                <label for="facebook_url">Facebook:</label>
+                {{ influencer_form.facebook_url }}
+            </div>
+            <div class="form-group">
+                <label for="x_url">X (Twitter):</label>
+                {{ influencer_form.x_url }}
+            </div>
+        {% endif %}
+        
+        <button type="submit" class="btn btn-primary mt-3">Guardar cambios</button>
     </form>
 </div>
 {% endblock %}

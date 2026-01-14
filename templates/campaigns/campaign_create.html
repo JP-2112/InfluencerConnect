@@ -22,6 +22,18 @@
                     <label for="id_deadline" class="form-label">Fecha límite</label>
                     {{ form.deadline|add_class:"form-control" }}
                 </div>
+                
+                </div>
+                <div class="mb-3">
+                    <label for="id_categories" class="form-label">Selecciona Categorías</label>
+                    <div>
+                        {{ form.categories }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="id_budget" class="form-label">Presupuesto</label>
+                    {{ form.budget|add_class:"form-control" }}
+                </div>
                 <button type="submit" class="btn btn-success">Crear</button>
             </form>
         </div>

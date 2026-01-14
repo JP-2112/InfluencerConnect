@@ -8,7 +8,12 @@
             {% for company in companies %}
                 <div class="col-md-4">
                     <div class="card mb-4">
-                        <div class="card-body">
+                        <div class="card-body text-center">
+                            <!-- Foto de perfil predeterminada para empresa -->
+                            <img src="https://w7.pngwing.com/pngs/784/809/png-transparent-building-small-business-company-office-corporation-office-icon-insharepics-miscellaneous-blue-text-thumbnail.png"
+                                 class="img-fluid rounded-circle mb-3"
+                                 alt="Logo empresa predeterminado"
+                                 style="width: 100px; height: 100px;">
                             <h5 class="card-title">{{ company.profile.user.username }}</h5>
                             <p class="card-text"><strong>Descripción:</strong> {{ company.description }}</p>
                             <a href="{% url 'profiles:profile_detail' company.profile.id %}" class="btn btn-primary">Ver Perfil</a>

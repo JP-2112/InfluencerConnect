@@ -9,18 +9,22 @@
     {% if user.profile.company %}
         <div class="card mt-5">
             <div class="card-body text-center">
-                <!-- Foto de perfil -->
-                {% if user.profile.company.logo %}
-                    <img src="{{ user.profile.company.logo.url }}" class="img-fluid rounded-circle mb-3" alt="Logotipo de la empresa" style="width: 150px; height: 150px;">
-                {% else %}
-                    <img src="/media/images/perritos.png" class="img-fluid rounded-circle mb-3" alt="Logotipo predeterminado" style="width: 150px; height: 150px;">
-                {% endif %}
+                <!-- Foto de perfil EMPRESA SIEMPRE PREDETERMINADA -->
+                <img src="https://w7.pngwing.com/pngs/784/809/png-transparent-building-small-business-company-office-corporation-office-icon-insharepics-miscellaneous-blue-text-thumbnail.png" class="img-fluid rounded-circle mb-3" alt="Logotipo predeterminado" style="width: 150px; height: 150px;">
                 
                 <!-- Nombre de usuario -->
                 <h3>{{ user.username }}</h3>
                 
-                <!-- Industria -->
-                <p><strong>Industria:</strong> {{ user.profile.company.industry }}</p>
+                <!-- Categorias -->
+                <p><strong>Industria:</strong>
+                    {% if company.categories.exists %}
+                        {% for category in company.categories.all %}
+                            <span class="badge bg-primary">{{ category.name }}</span>
+                        {% endfor %}
+                    {% else %}
+                         No especificada
+                    {% endif %}
+                </p>
                 
                 <!-- Tamaño -->
                 <p><strong>Tamaño:</strong> {{ user.profile.company.company_size }}</p>
@@ -39,6 +43,30 @@
                         No especificado
                     {% endif %}
                 </p>
+
+                <!-- Redes sociales empresa -->
+                <div class="mb-3">
+                    {% if user.profile.company.instagram_url %}
+                        <a href="{{ user.profile.company.instagram_url }}" target="_blank" class="btn btn-outline-secondary btn-sm me-1">
+                            <i class="fab fa-instagram"></i> Instagram
+                        </a>
+                    {% endif %}
+                    {% if user.profile.company.youtube_url %}
+                        <a href="{{ user.profile.company.youtube_url }}" target="_blank" class="btn btn-outline-secondary btn-sm me-1">
+                            <i class="fab fa-youtube"></i> YouTube
+                        </a>
+                    {% endif %}
+                    {% if user.profile.company.facebook_url %}
+                        <a href="{{ user.profile.company.facebook_url }}" target="_blank" class="btn btn-outline-secondary btn-sm me-1">
+                            <i class="fab fa-facebook"></i> Facebook
+                        </a>
+                    {% endif %}
+                    {% if user.profile.company.x_url %}
+                        <a href="{{ user.profile.company.x_url }}" target="_blank" class="btn btn-outline-secondary btn-sm me-1">
+                            <i class="fab fa-x-twitter"></i> X
+                        </a>
+                    {% endif %}
+                </div>
                 
                 <!-- Ubicación -->
                 <p><strong>Ubicación:</strong> {{ user.profile.location|default:"No especificada" }}</p>
@@ -50,22 +78,23 @@
     {% if user.profile.influencer %}
         <div class="card mt-5">
             <div class="card-body text-center">
-                <!-- Foto de perfil -->
-                {% if user.profile.influencer.profile_photo %}
-                    <img src="{{ user.profile.influencer.profile_photo.url }}" class="img-fluid rounded-circle mb-3" alt="Foto de perfil" style="width: 150px; height: 150px;">
-                {% else %}
-                    <img src="/media/images/meme.jpeg" class="img-fluid rounded-circle mb-3" alt="Foto predeterminada" style="width: 150px; height: 150px;">
-                {% endif %}
+                <!-- Foto de perfil INFLUENCER SIEMPRE PREDETERMINADA -->
+                <img src="https://images.icon-icons.com/3217/PNG/512/user_avatar_profile_person_man_icon_196571.png" class="img-fluid rounded-circle mb-3" alt="Foto predeterminada" style="width: 150px; height: 150px;">
                 
                 <!-- Nombre de usuario -->
                 <h3>{{ user.username }}</h3>
                 
-                <!-- Categoría -->
-                <p><strong>Categoría:</strong> {{ user.profile.influencer.category }}</p>
-                
-                <!-- Plataformas -->
-                <p><strong>Plataformas:</strong> {{ user.profile.influencer.platforms }}</p>
-                
+                <!-- Categorías -->
+                <p><strong>Categorías:</strong>
+                    {% if user.profile.influencer.categories.all %}
+                        {% for category in user.profile.influencer.categories.all %}
+                            <span class="badge bg-primary">{{ category.name }}</span>
+                        {% endfor %}
+                    {% else %}
+                        No especificadas
+                    {% endif %}
+                </p>
+            
                 <!-- Tamaño de audiencia -->
                 <p><strong>Tamaño de audiencia:</strong> {{ user.profile.influencer.audience_size }}</p>
                 
@@ -83,6 +112,30 @@
                         No especificado
                     {% endif %}
                 </p>
+
+                <!-- Redes sociales influencer -->
+                <div class="mb-3">
+                    {% if user.profile.influencer.instagram_url %}
+                        <a href="{{ user.profile.influencer.instagram_url }}" target="_blank" class="btn btn-outline-secondary btn-sm me-1">
+                            <i class="fab fa-instagram"></i> Instagram
+                        </a>
+                    {% endif %}
+                    {% if user.profile.influencer.youtube_url %}
+                        <a href="{{ user.profile.influencer.youtube_url }}" target="_blank" class="btn btn-outline-secondary btn-sm me-1">
+                            <i class="fab fa-youtube"></i> YouTube
+                        </a>
+                    {% endif %}
+                    {% if user.profile.influencer.facebook_url %}
+                        <a href="{{ user.profile.influencer.facebook_url }}" target="_blank" class="btn btn-outline-secondary btn-sm me-1">
+                            <i class="fab fa-facebook"></i> Facebook
+                        </a>
+                    {% endif %}
+                    {% if user.profile.influencer.x_url %}
+                        <a href="{{ user.profile.influencer.x_url }}" target="_blank" class="btn btn-outline-secondary btn-sm me-1">
+                            <i class="fab fa-x-twitter"></i> X
+                        </a>
+                    {% endif %}
+                </div>
                 
                 <!-- Ubicación -->
                 <p><strong>Ubicación:</strong> {{ user.profile.location|default:"No especificada" }}</p>

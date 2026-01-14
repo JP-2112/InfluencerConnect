@@ -4,39 +4,63 @@ from django.http import JsonResponse
 from django.db.models import Q
 from .models import Campaign, Application, Comment, CampaignView, Response
 from .forms import CampaignForm, ApplicationForm, ResponseForm
+from profiles.models import InfluencerProfile  # Importar el modelo de perfil de influencer
 
 @login_required
 def campaign_list(request):
-    query = request.GET.get('q')  # Obtén la palabra clave de la búsqueda
+    query = request.GET.get('q')
     if request.user.user_type == 'empresa':
         campaigns = Campaign.objects.filter(company=request.user)
+        applied_campaign_ids = []
     else:
+        # Obtener las categorías del influencer usando el campo correcto
+        influencer_profile = InfluencerProfile.objects.get(profile__user=request.user)
+        influencer_categories = influencer_profile.categories.all()
+        # Filtrar campañas que tengan al menos una categoría en común con el influencer
+        campaigns = Campaign.objects.filter(categories__in=influencer_categories).distinct()
+        # Obtener campañas a las que el influencer ya se postuló
+        applied_campaign_ids = list(Application.objects.filter(influencer=request.user).values_list('campaign_id', flat=True))
         if query:
-            campaigns = Campaign.objects.filter(
-                Q(name__icontains=query) | Q(description__icontains=query)  # Cambiado 'title' por 'name'
+            campaigns = campaigns.filter(
+                Q(name__icontains=query) | Q(description__icontains=query)
             )
-        else:
-            campaigns = Campaign.objects.all()
 
     for campaign in campaigns:
         # Verificar si el usuario ya ha visto esta campaña
         if not CampaignView.objects.filter(campaign=campaign, user=request.user).exists():
-            # Registrar la vista y aumentar el contador
             CampaignView.objects.create(campaign=campaign, user=request.user)
             campaign.views += 1
             campaign.save()
 
-    return render(request, 'campaigns/campaign_list.html', {'campaigns': campaigns})
+        # Calcular el engagement rate para cada campaña
+        if campaign.views > 0:
+            campaign.engagement_rate = round(((campaign.likes + campaign.comment_set.count()) / campaign.views) * 100, 2)
+        else:
+            campaign.engagement_rate = 0
+
+        # Filtrar influencers por categorías de la campaña
+        campaign.influencers = InfluencerProfile.objects.filter(categories__in=campaign.categories.all()).distinct()
+
+    return render(request, 'campaigns/campaign_list.html', {
+        'campaigns': campaigns,
+        'applied_campaign_ids': applied_campaign_ids,
+    })
 
 @login_required
 def campaign_create(request):
+    if request.user.user_type != 'empresa':
+        return redirect('campaigns:campaign_list')  # Solo empresas pueden crear campañas
+
     if request.method == 'POST':
         form = CampaignForm(request.POST)
         if form.is_valid():
             campaign = form.save(commit=False)
             campaign.company = request.user
             campaign.save()
+            form.save_m2m()  # Guardar las relaciones ManyToMany (como las categorías)
             return redirect('campaigns:campaign_list')
+        else:
+            print(form.errors)  # Para depuración: imprime errores en consola
     else:
         form = CampaignForm()
     return render(request, 'campaigns/campaign_create.html', {'form': form})
@@ -84,12 +108,22 @@ def campaign_applications(request, campaign_id):
 
 @login_required
 def like_campaign(request, campaign_id):
-    if request.method == 'POST':
-        campaign = get_object_or_404(Campaign, id=campaign_id)
+    if request.user.user_type != 'influencer':
+        return JsonResponse({'error': 'Solo los influencers pueden dar like.'}, status=403)
+
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+
+    if request.user in campaign.liked_by.all():
+        campaign.liked_by.remove(request.user)
+        campaign.likes -= 1
+        liked = False
+    else:
+        campaign.liked_by.add(request.user)
         campaign.likes += 1
-        campaign.save()
-        return JsonResponse({'likes': campaign.likes})
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+        liked = True
+
+    campaign.save()
+    return JsonResponse({'liked': liked, 'likes_count': campaign.likes})
 
 @login_required
 def respond_to_application(request, application_id):
@@ -136,3 +170,16 @@ def influencer_applications(request):
         'applications': applications,
         'form': form
     })
+
+@login_required
+def add_comment(request, campaign_id):
+    if request.method == 'POST':
+        campaign = get_object_or_404(Campaign, id=campaign_id)
+        content = request.POST.get('content')
+
+        if not content:
+            # Puedes mostrar un mensaje de error si quieres, aquí solo recarga la página
+            return redirect('campaigns:campaign_list')
+
+        Comment.objects.create(user=request.user, campaign=campaign, content=content)
+        return redirect('campaigns:campaign_list')

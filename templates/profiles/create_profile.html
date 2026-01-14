@@ -37,18 +37,6 @@
                     <form method="post" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
                         
-                        <div class="row">
-                            <div class="col-md-12 mb-4 text-center">
-                                <label for="{{ profile_form.profile_picture.id_for_label }}" class="form-label d-block">
-                                    <div class="icon-circle mx-auto mb-2" style="cursor: pointer;">
-                                        <i class="fas fa-camera"></i>
-                                    </div>
-                                    <span>Foto de perfil</span>
-                                </label>
-                                {{ profile_form.profile_picture|as_crispy_field }}
-                            </div>
-                        </div>
-                        
                         <div class="mb-3">
                             {{ profile_form.bio|as_crispy_field }}
                         </div>
@@ -72,20 +60,53 @@
                         
                         {% if user_type == 'empresa' %}
                             <div class="mb-3">
-                                {{ specific_form.industry|as_crispy_field }}
+                                <label for="id_categories" class="form-label">Categorías</label>
+                                {{ specific_form.categories|as_crispy_field }}
                             </div>
                             <div class="mb-3">
                                 {{ specific_form.company_size|as_crispy_field }}
                             </div>
+                            <!-- Redes sociales empresa -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.instagram_url|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.youtube_url|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.facebook_url|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.x_url|as_crispy_field }}
+                                </div>
+                            </div>
                         {% else %}
                             <div class="mb-3">
-                                {{ specific_form.category|as_crispy_field }}
-                            </div>
-                            <div class="mb-3">
-                                {{ specific_form.platforms|as_crispy_field }}
+                                <label for="id_categories" class="form-label">Categorías</label>
+                                {{ specific_form.categories|as_crispy_field }}
                             </div>
                             <div class="mb-3">
                                 {{ specific_form.audience_size|as_crispy_field }}
+                            </div>
+                            <!-- Redes sociales influencer -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.instagram_url|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.youtube_url|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.facebook_url|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.x_url|as_crispy_field }}
+                                </div>
                             </div>
                         {% endif %}
                         

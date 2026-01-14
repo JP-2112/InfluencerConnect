@@ -13,4 +13,5 @@ urlpatterns = [
     path('influencer_applications/', views.influencer_applications, name='influencer_applications'),
     path('<int:campaign_id>/edit/', views.campaign_edit, name='campaign_edit'),
     path('', views.campaign_list, name='campaign_list'),
+    path('<int:campaign_id>/comment/', views.add_comment, name='add_comment'),
 ]

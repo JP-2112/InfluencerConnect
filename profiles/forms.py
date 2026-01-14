@@ -1,18 +1,16 @@
 from django import forms
-from .models import Profile, CompanyProfile, InfluencerProfile
+from .models import Profile, CompanyProfile, InfluencerProfile, Category
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_picture', 'bio', 'website', 'location']
+        fields = ['bio', 'website', 'location']  # Quitado 'profile_picture'
         labels = {
-            'profile_picture': 'Foto de perfil',
             'bio': 'Descripción',
             'website': 'Sitio web',
             'location': 'Ubicación',
         }
         widgets = {
-            'profile_picture': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'website': forms.URLInput(attrs={'class': 'form-control'}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
@@ -21,32 +19,35 @@ class ProfileForm(forms.ModelForm):
 class CompanyProfileForm(forms.ModelForm):
     class Meta:
         model = CompanyProfile
-        fields = ['industry', 'company_size', 'logo']  # Agregado el campo 'logo'
-        labels = {
-            'industry': 'Industria',
-            'company_size': 'Tamaño de la empresa',
-            'logo': 'Logotipo de la empresa',
-        }
+        fields = [
+            'categories', 'company_size', 'description',
+            'instagram_url', 'youtube_url', 'facebook_url', 'x_url'
+        ]  # Quitado 'logo'
         widgets = {
-            'industry': forms.Select(attrs={'class': 'form-control'}),
+            'categories': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-inline'}),
             'company_size': forms.Select(attrs={'class': 'form-control'}),
-            'logo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'instagram_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://instagram.com/tuempresa'}),
+            'youtube_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://youtube.com/tuempresa'}),
+            'facebook_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://facebook.com/tuempresa'}),
+            'x_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://x.com/tuempresa'}),
         }
 
 class InfluencerProfileForm(forms.ModelForm):
     class Meta:
         model = InfluencerProfile
-        fields = ['category', 'platforms', 'audience_size', 'profile_photo', 'bio']  
-        labels = {
-            'category': 'Categoría principal',
-            'platforms': 'Plataformas',
-            'audience_size': 'Tamaño de audiencia',
-            'profile_photo': 'Foto de perfil',
-        }
+        fields = [
+            'categories', 'platforms', 'audience_size', 'bio',
+            'instagram_url', 'youtube_url', 'facebook_url', 'x_url'
+        ]  # Quitado 'profile_photo'
         widgets = {
-            'category': forms.Select(attrs={'class': 'form-control'}),
+            'categories': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-inline'}),
             'platforms': forms.TextInput(attrs={'class': 'form-control'}),
             'audience_size': forms.Select(attrs={'class': 'form-control'}),
-            'profile_photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control'}),
+            'instagram_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://instagram.com/tuusuario'}),
+            'youtube_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://youtube.com/tuusuario'}),
+            'facebook_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://facebook.com/tuusuario'}),
+            'x_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://x.com/tuusuario'}),
         }
 

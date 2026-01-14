@@ -9,7 +9,12 @@
             {% for influencer in influencers %}
                 <div class="col-md-4">
                     <div class="card mb-4">
-                        <div class="card-body">
+                        <div class="card-body text-center">
+                            <!-- Foto de perfil predeterminada para influencer -->
+                            <img src="https://images.icon-icons.com/3217/PNG/512/user_avatar_profile_person_man_icon_196571.png"
+                                 class="img-fluid rounded-circle mb-3"
+                                 alt="Foto predeterminada"
+                                 style="width: 100px; height: 100px;">
                             <h5 class="card-title">{{ influencer.profile.user.username }}</h5>
                             <p class="card-text"><strong>Bio:</strong> {{ influencer.profile.bio }}</p>
                             <a href="{% url 'profiles:profile_detail' influencer.profile.id %}" class="btn btn-primary">Ver Perfil</a>

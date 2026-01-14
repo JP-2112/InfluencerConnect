@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.timezone import now
+from profiles.models import Category  # Importar el modelo de categorías
 
 class Campaign(models.Model):
     name = models.CharField(max_length=255)
@@ -11,12 +12,12 @@ class Campaign(models.Model):
         limit_choices_to={'user_type': 'empresa'}
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    deadline = models.DateTimeField()  # Fecha de fin
-    budget = models.DecimalField(max_digits=10, decimal_places=2)  # Presupuesto
+    deadline = models.DateTimeField()
+    budget = models.DecimalField(max_digits=10, decimal_places=2)
     views = models.PositiveIntegerField(default=0)
     likes = models.PositiveIntegerField(default=0)
-    comments = models.ManyToManyField('Comment', blank=True, related_name='campaign_comments')
-    image = models.ImageField(upload_to='campaign_images/', blank=True, null=True)  
+    liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='liked_campaigns')
+    categories = models.ManyToManyField(Category, blank=True, related_name='campaigns')  # Relación con categorías
 
     def __str__(self):
         return self.name
@@ -26,7 +27,7 @@ class Campaign(models.Model):
 
     def engagement_rate(self):
         if self.views > 0:
-            return round(((self.likes + self.comments.count()) / self.views) * 100, 2)
+            return round(((self.likes + self.comment_set.count()) / self.views) * 100, 2)
         return 0.0
 
 class Application(models.Model):
