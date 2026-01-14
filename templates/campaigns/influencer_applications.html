@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block title %}Mis Postulaciones{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Mis Postulaciones</h1>
+
+    {% if applications %}
+        <div class="row">
+            {% for application in applications %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ application.campaign.name }}</h5>
+                            <p class="card-text">
+                                <strong>Mensaje enviado:</strong> {{ application.message }}
+                            </p>
+                            <p class="text-muted">
+                                <small>Presupuesto: ${{ application.campaign.budget }}</small><br>
+                                <small>Fecha de Fin: {{ application.campaign.deadline|date:"d/m/Y H:i" }}</small><br>
+                                <small>Postulado el: {{ application.created_at|date:"d/m/Y H:i" }}</small>
+                            </p>
+
+                            <!-- Mostrar respuestas -->
+                            <h6>Respuestas:</h6>
+                            {% for response in application.responses.all %}
+                                <div class="alert {% if response.user == application.campaign.company %}alert-secondary{% else %}alert-info{% endif %}">
+                                    <p class="mb-0">{{ response.content }}</p>
+                                    <small class="text-muted">
+                                        {{ response.user.username }} - {{ response.created_at|date:"d/m/Y H:i" }}
+                                    </small>
+                                </div>
+                            {% empty %}
+                                <p class="text-muted">No hay respuestas aún.</p>
+                            {% endfor %}
+                            <hr>
+
+                            <!-- Formulario para responder -->
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="application_id" value="{{ application.id }}">
+                                <div class="mb-3">
+                                    <label for="id_content" class="form-label">Tu Respuesta</label>
+                                    {{ form.content|add_class:"form-control" }}
+                                </div>
+                                <button type="submit" class="btn btn-success btn-sm">Enviar Respuesta</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No tienes postulaciones aún.</p>
+    {% endif %}
+</div>
+{% endblock %}

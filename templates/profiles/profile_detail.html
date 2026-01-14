@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Perfil de {{ profile.user.username }}</h1>
+    <div class="card">
+        <div class="card-body">
+            <!-- Foto de perfil según tipo de cuenta -->
+            {% if profile.company %}
+                {% if profile.company.logo %}
+                    <img src="{{ profile.company.logo.url }}" class="img-fluid rounded-circle mb-3" alt="Logo empresa" style="width: 150px; height: 150px;">
+                {% else %}
+                    <img src="https://w7.pngwing.com/pngs/784/809/png-transparent-building-small-business-company-office-corporation-office-icon-insharepics-miscellaneous-blue-text-thumbnail.png" class="img-fluid rounded-circle mb-3" alt="Logo empresa por defecto" style="width: 150px; height: 150px;">
+                {% endif %}
+            {% elif profile.influencer %}
+                {% if profile.influencer.profile_photo %}
+                    <img src="{{ profile.influencer.profile_photo.url }}" class="img-fluid rounded-circle mb-3" alt="Foto influencer" style="width: 150px; height: 150px;">
+                {% else %}
+                    <img src="https://images.icon-icons.com/3217/PNG/512/user_avatar_profile_person_man_icon_196571.png" class="img-fluid rounded-circle mb-3" alt="Foto influencer por defecto" style="width: 150px; height: 150px;">
+                {% endif %}
+            {% endif %}
+
+            <h5 class="card-title">{{ profile.user.username }}</h5>
+            <p class="card-text"><strong>Email:</strong> {{ profile.user.email }}</p>
+            <p class="card-text"><strong>Bio:</strong> {{ profile.bio }}</p>
+            <p class="card-text"><strong>Ubicación:</strong> {{ profile.location }}</p>
+            <p class="card-text"><strong>Sitio web:</strong> <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></p>
+            
+            {% if profile.company %}
+                {% with company=profile.company %}
+                    {% if company.instagram_url %}
+                        <p><a href="{{ company.instagram_url }}" target="_blank">Instagram</a></p>
+                    {% endif %}
+                    {% if company.youtube_url %}
+                        <p><a href="{{ company.youtube_url }}" target="_blank">YouTube</a></p>
+                    {% endif %}
+                    {% if company.facebook_url %}
+                        <p><a href="{{ company.facebook_url }}" target="_blank">Facebook</a></p>
+                    {% endif %}
+                    {% if company.x_url %}
+                        <p><a href="{{ company.x_url }}" target="_blank">X</a></p>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+            {% if profile.influencer %}
+                {% with influencer=profile.influencer %}
+                    {% if influencer.instagram_url %}
+                        <p><a href="{{ influencer.instagram_url }}" target="_blank">Instagram</a></p>
+                    {% endif %}
+                    {% if influencer.youtube_url %}
+                        <p><a href="{{ influencer.youtube_url }}" target="_blank">YouTube</a></p>
+                    {% endif %}
+                    {% if influencer.facebook_url %}
+                        <p><a href="{{ influencer.facebook_url }}" target="_blank">Facebook</a></p>
+                    {% endif %}
+                    {% if influencer.x_url %}
+                        <p><a href="{{ influencer.x_url }}" target="_blank">X</a></p>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

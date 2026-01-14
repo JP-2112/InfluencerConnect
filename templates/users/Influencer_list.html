@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Influencers</h1>
+    {% if influencers %}
+        <div class="row">
+            {% for influencer in influencers %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ influencer.profile.user.username }}</h5>
+                            <p class="card-text"><strong>Bio:</strong> {{ influencer.profile.bio }}</p>
+                            <a href="{% url 'profiles:profile_detail' influencer.profile.id %}" class="btn btn-primary">Ver Perfil</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No hay influencers registrados.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Nuevo Mensaje - InfluencerConnect{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Enviar Nuevo Mensaje</h5>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="recipient" class="form-label">Seleccionar destinatario</label>
+                            <select name="recipient" id="recipient" class="form-select" required>
+                                <option value="" disabled selected>-- Seleccionar --</option>
+                                {% for recipient in recipients %}
+                                    <option value="{{ recipient.id }}">{{ recipient.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Mensaje</label>
+                            <textarea name="content" id="content" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-1"></i> Enviar Mensaje
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

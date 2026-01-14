@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Empresas</h1>
+    {% if companies %}
+        <div class="row">
+            {% for company in companies %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ company.username }}</h5>
+                            <p class="card-text"><strong>Descripción:</strong> {{ company.company_description }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No hay empresas registradas.</p>
+    {% endif %}
+</div>
+{% endblock %}

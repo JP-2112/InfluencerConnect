@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block title %}Conversación{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Conversación sobre la Postulación</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Mensaje del Influencer:</strong></p>
+                    <blockquote class="blockquote">
+                        <p class="mb-0">{{ application.message }}</p>
+                        <footer class="blockquote-footer">
+                            Enviado el {{ application.created_at|date:"d/m/Y H:i" }}
+                        </footer>
+                    </blockquote>
+                    <hr>
+
+                    <!-- Mostrar todas las respuestas -->
+                    <h6>Respuestas:</h6>
+                    {% for response in responses %}
+                        <div class="alert {% if response.user == application.campaign.company %}alert-secondary{% else %}alert-info{% endif %}">
+                            <p class="mb-0">{{ response.content }}</p>
+                            <small class="text-muted">
+                                {{ response.user.username }} - {{ response.created_at|date:"d/m/Y H:i" }}
+                            </small>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">No hay respuestas aún.</p>
+                    {% endfor %}
+                    <hr>
+
+                    <!-- Formulario para responder -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_content" class="form-label">Tu Respuesta</label>
+                            {{ form.content|add_class:"form-control" }}
+                        </div>
+                        <button type="submit" class="btn btn-success">Enviar Respuesta</button>
+                        <a href="{% url 'campaigns:campaign_list' %}" class="btn btn-secondary">Volver</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

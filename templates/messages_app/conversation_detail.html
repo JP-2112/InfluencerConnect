@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Detalle de la Conversación</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            {% for message in messages_list %}
+                <div class="mb-3">
+                    <strong>{{ message.sender.username }}</strong>:
+                    <p>{{ message.content }}</p>
+                    <small class="text-muted">{{ message.timestamp|date:"d/m/Y H:i" }}</small>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+{% endblock %}

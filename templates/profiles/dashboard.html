@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfluencerConnect Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .dashboard-container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .profile-info {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+        }
+
+        .campaigns {
+            margin-top: 20px;
+        }
+
+        .campaign-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .campaign-list li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        .campaign-list li:hover {
+            background-color: #eee;
+        }
+
+        .campaign-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>InfluencerConnect Dashboard</h1>
+
+        <div class="profile-info">
+            <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <!-- Add more profile information here -->
+        </div>
+
+        <div class="campaigns">
+            <h2>Your Campaigns</h2>
+            <ul class="campaign-list">
+                {% for campaign in campaigns %}
+                    <li>
+                        <span class="campaign-title">{{ campaign.title }}</span>
+                        <p>{{ campaign.description }}</p>
+                        <!-- Add more campaign details here -->
+                    </li>
+                {% empty %}
+                    <li>No campaigns yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+

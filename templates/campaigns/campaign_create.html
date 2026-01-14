@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block title %}Crear Campaña{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Crear Campaña</h1>
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_name" class="form-label">Nombre</label>
+                    {{ form.name|add_class:"form-control" }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">Descripción</label>
+                    {{ form.description|add_class:"form-control" }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_deadline" class="form-label">Fecha límite</label>
+                    {{ form.deadline|add_class:"form-control" }}
+                </div>
+                
+                </div>
+                <div class="mb-3">
+                    <label for="id_categories" class="form-label">Selecciona Categorías</label>
+                    <div>
+                        {{ form.categories }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="id_budget" class="form-label">Presupuesto</label>
+                    {{ form.budget|add_class:"form-control" }}
+                </div>
+                <button type="submit" class="btn btn-success">Crear</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

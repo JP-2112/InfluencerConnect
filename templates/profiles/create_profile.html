@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Crear Perfil - InfluencerConnect{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <div class="icon-circle">
+                            {% if user_type == 'empresa' %}
+                                <i class="fas fa-building"></i>
+                            {% else %}
+                                <i class="fas fa-user"></i>
+                            {% endif %}
+                        </div>
+                        <h2 class="fw-bold">Completa tu perfil</h2>
+                        <div class="divider-custom">
+                            <div class="divider-custom-line"></div>
+                            <div class="divider-custom-icon">
+                                <i class="fas fa-user-edit"></i>
+                            </div>
+                            <div class="divider-custom-line"></div>
+                        </div>
+                        <p class="text-muted">
+                            {% if user_type == 'empresa' %}
+                                Proporciona información sobre tu empresa para que los influencers puedan conocerte mejor
+                            {% else %}
+                                Proporciona información sobre tu trabajo como influencer para que las empresas puedan conocerte mejor
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            {{ profile_form.bio|as_crispy_field }}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ profile_form.website|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ profile_form.location|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="divider-custom my-4">
+                            <div class="divider-custom-line"></div>
+                            <div class="divider-custom-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="divider-custom-line"></div>
+                        </div>
+                        
+                        {% if user_type == 'empresa' %}
+                            <div class="mb-3">
+                                <label for="id_categories" class="form-label">Categorías</label>
+                                {{ specific_form.categories|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
+                                {{ specific_form.company_size|as_crispy_field }}
+                            </div>
+                            <!-- Redes sociales empresa -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.instagram_url|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.youtube_url|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.facebook_url|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.x_url|as_crispy_field }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="mb-3">
+                                <label for="id_categories" class="form-label">Categorías</label>
+                                {{ specific_form.categories|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
+                                {{ specific_form.audience_size|as_crispy_field }}
+                            </div>
+                            <!-- Redes sociales influencer -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.instagram_url|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.youtube_url|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.facebook_url|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ specific_form.x_url|as_crispy_field }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary py-2">
+                                <i class="fas fa-save me-2"></i>Guardar perfil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

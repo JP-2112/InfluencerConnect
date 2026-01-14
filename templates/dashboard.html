@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - InfluencerConnect{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Sidebar / Perfil -->
+        <div class="col-lg-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        {% if profile.profile_picture %}
+                            <img src="{{ profile.profile_picture.url }}" alt="{{ user.username }}" class="rounded-circle img-fluid" style="width: 120px; height: 120px; object-fit: cover;">
+                        {% else %}
+                            <div class="icon-circle mx-auto">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <h5 class="card-title">{{ user.username }}</h5>
+                    <p class="card-text text-muted">
+                        {% if user.user_type == 'empresa' %}
+                            <i class="fas fa-building me-1"></i> Empresa
+                        {% else %}
+                            <i class="fas fa-user me-1"></i> Influencer
+                        {% endif %}
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'profiles:edit_profile' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-edit me-1"></i> Editar perfil
+                        </a>
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-envelope me-2"></i> Mensajes</span>
+                        <span class="badge bg-primary rounded-pill">{{ conversations|length }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Mensajes recientes -->
+        <div class="col-lg-3">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Mensajes recientes</h5>
+                    <a href="{% url 'messages_app:inbox' %}" class="btn btn-sm btn-outline-primary">Ver todos</a>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for conversation in conversations %}
+                    <a href="{% url 'messages_app:conversation_detail' conversation.id %}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                {% with user=conversation.get_other_participant %}
+                                    {{ user.username }}
+                                {% endwith %}
+                            </h6>
+                            <small>{{ conversation.updated_at|timesince }}</small>
+                        </div>
+                        <p class="mb-1 text-truncate">
+                            {% with conversation.get_last_message as last_message %}
+                                {% if last_message %}
+                                    {{ last_message.content }}
+                                {% else %}
+                                    Inicia una conversación
+                                {% endif %}
+                            {% endwith %}
+                        </p>
+                    </a>
+                    {% empty %}
+                    <div class="list-group-item text-center py-3">
+                        <p class="mb-0 text-muted">No tienes mensajes recientes</p>
+                        <a href="{% url 'messages_app:new_message' %}" class="btn btn-sm btn-primary mt-2">
+                            <i class="fas fa-plus me-1"></i> Nuevo mensaje
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

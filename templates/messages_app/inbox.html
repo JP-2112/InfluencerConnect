@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>InfluencerConnect Inbox</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+
+    {% block content %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Bandeja de Entrada</h1>
+
+        {% if conversations %}
+            <ul class="list-group">
+                {% for conversation in conversations %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>Con:</strong> {{ conversation.other_participant.username }}<br>
+                                <strong>Último mensaje:</strong> 
+                                {% with conversation.get_last_message as last_message %}
+                                    {{ last_message.body|truncatechars:50 }}
+                                {% endwith %}
+                            </div>
+                            <div>
+                                <a href="{% url 'messages_app:conversation_detail' conversation.id %}" class="btn btn-sm btn-primary">Ver Conversación</a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">No tienes mensajes en tu bandeja de entrada.</p>
+        {% endif %}
+    </div>
+    {% endblock %}
+</body>
+</html>
+
